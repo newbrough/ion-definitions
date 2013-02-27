@@ -1,0 +1,41 @@
+# base configuration for log levels
+#
+# To define local overrides, add a file "logging.local.yml"
+#
+version: 1
+
+formatters:
+  brief:
+    format: '%(asctime)s %(levelname)-8s %(name)-15s %(message)s'
+  default:
+    (): 'ooi.logging.format.StackFormatter'
+    format: '%(asctime)s %(levelname)s %(threadName)s %(name)s:%(lineno)d %(message)s'
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: default
+    level: TRACE
+    stream: ext://sys.stdout
+  file:
+    class: logging.handlers.RotatingFileHandler
+    formatter: default
+    level: TRACE
+    filename: logs/container.log
+    maxBytes: 1024000
+    backupCount: 3
+
+root:
+  handlers: [console, file]
+  level: INFO
+
+# specific overrides for packages
+#
+# only needed if different than the root settings
+#
+# example:
+#
+#loggers:
+#  mi.core:
+#    level: TRACE
+#
